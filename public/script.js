@@ -231,21 +231,53 @@ function editarCliente(id, nome, cpf, email, telefone) {
 // BUSCA E FILTRO
 // ========================================
 
-// Filtra clientes pela busca
+// Busca clientes no backend
+async function buscarClientes(tipo, valor) {
+    const loadingMessage = document.getElementById('loadingMessage');
+    const emptyMessage = document.getElementById('emptyMessage');
+    const clientsList = document.getElementById('clientsList');
+    
+    loadingMessage.style.display = 'block';
+    clientsList.innerHTML = '';
+    
+    try {
+        const resposta = await fetch(`/clientes/buscar?tipo=${tipo}&valor=${encodeURIComponent(valor)}`);
+        
+        if (!resposta.ok) {
+            throw new Error('Erro ao buscar clientes');
+        }
+        
+        const clientes = await resposta.json();
+        loadingMessage.style.display = 'none';
+        
+        if (clientes.length === 0) {
+            emptyMessage.style.display = 'block';
+            clientsList.innerHTML = '';
+        } else {
+            emptyMessage.style.display = 'none';
+            exibirTabela(clientes);
+        }
+    } catch (erro) {
+        loadingMessage.style.display = 'none';
+        emptyMessage.style.display = 'block';
+        console.error('Erro:', erro);
+        mostrarMensagem('Erro ao buscar os clientes. Tente novamente.', 'erro');
+    }
+}
+
+// Filtra clientes pela busca (agora busca no backend)
 function filtrarClientes() {
     const searchInput = document.getElementById('searchInput');
-    const filtro = searchInput.value.toLowerCase();
-    const linhas = document.querySelectorAll('table tbody tr');
+    const searchType = document.getElementById('searchType');
+    const valor = searchInput.value.trim();
     
-    linhas.forEach(linha => {
-        const nome = linha.querySelector('td:nth-child(2)').textContent.toLowerCase();
-        
-        if (nome.includes(filtro)) {
-            linha.style.display = '';
-        } else {
-            linha.style.display = 'none';
-        }
-    });
+    if (valor === '') {
+        // Se vazio, carrega todos
+        carregarClientes();
+    } else {
+        // Busca no backend
+        buscarClientes(searchType.value, valor);
+    }
 }
 
 // ========================================
@@ -286,8 +318,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Botão Recarregar Lista
     document.getElementById('btnRecarregar').addEventListener('click', carregarClientes);
     
-    // Busca em tempo real
-    document.getElementById('searchInput').addEventListener('keyup', filtrarClientes);
+    // Botão Buscar
+    document.getElementById('btnBuscar').addEventListener('click', filtrarClientes);
+    
+    // Busca em tempo real (opcional, pode ser removido se quiser apenas botão)
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            filtrarClientes();
+        }
+    });
     
     // Fechar modal ao clicar fora
     document.getElementById('modalMessage').addEventListener('click', function(e) {

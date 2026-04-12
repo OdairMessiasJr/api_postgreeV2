@@ -8,6 +8,22 @@ exports.findAll = async () => {
     return result.rows;  
 };
 
+// 1.1 GET (Buscar por nome)
+exports.findByName = async (nome) => {
+    const text = 'SELECT id, nome, cpf, email, telefone FROM clientes WHERE LOWER(nome) LIKE LOWER($1) ORDER BY id';
+    const values = [`%${nome}%`];
+    const result = await pool.query(text, values);
+    return result.rows;
+};
+
+// 1.2 GET (Buscar por id)
+exports.findById = async (id) => {
+    const text = 'SELECT id, nome, cpf, email, telefone FROM clientes WHERE id = $1';
+    const values = [id];
+    const result = await pool.query(text, values);
+    return result.rows;
+};
+
 // 2. POST (Criar novo)
 exports.create = async (nome, cpf, email, telefone) => { 
     const text = `

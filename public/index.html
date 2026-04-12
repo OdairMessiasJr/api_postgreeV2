@@ -56,7 +56,12 @@
                 <div class="list-controls">
                     <button class="btn btn-success" id="btnRecarregar">🔄 Recarregar Lista</button>
                     <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Buscar por nome...">
+                        <select id="searchType">
+                            <option value="nome">Buscar por Nome</option>
+                            <option value="id">Buscar por ID</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="Digite o valor para buscar...">
+                        <button class="btn btn-primary" id="btnBuscar">Buscar</button>
                     </div>
                 </div>
 

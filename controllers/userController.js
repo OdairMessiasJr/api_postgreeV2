@@ -12,6 +12,32 @@ exports.getUsers = async (req, res) => {
   } 
 }; 
 
+// 1.1 READ (GET /clientes/buscar?tipo=nome&valor=...) - Buscar por nome ou id
+exports.searchUsers = async (req, res) => {
+  const { tipo, valor } = req.query;
+
+  if (!tipo || !valor) {
+    return res.status(400).json({ error: 'Parâmetros tipo e valor são obrigatórios.' });
+  }
+
+  if (tipo !== 'nome' && tipo !== 'id') {
+    return res.status(400).json({ error: 'Tipo deve ser "nome" ou "id".' });
+  }
+
+  try {
+    let clientes;
+    if (tipo === 'nome') {
+      clientes = await userModel.findByName(valor);
+    } else {
+      clientes = await userModel.findById(parseInt(valor));
+    }
+    res.json(clientes);
+  } catch (err) {
+    console.error('Erro ao buscar usuários:', err);
+    res.status(500).json({ error: 'Erro interno ao buscar usuários' });
+  }
+}; 
+
 // 2. CREATE (POST /clientes) - Criar novo 
 exports.createUser = async (req, res) => { 
     // Extraímos os 4 campos do corpo da requisição

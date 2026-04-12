@@ -5,6 +5,9 @@ const userController = require('../controllers/userController');
 
 // Lista todos os usuários
 router.get('/', userController.getUsers); 
+
+// Busca usuários por nome ou id
+router.get('/buscar', userController.searchUsers); 
  
 // Cria um novo usuário (espera nome, cpf, email, telefone no body)
 router.post('/', userController.createUser); 
