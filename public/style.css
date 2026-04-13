@@ -342,6 +342,14 @@ table tbody tr:nth-child(even) {
     z-index: 1000;
 }
 
+#loadingMessage {
+    display: none;
+}
+
+#modalMessage {
+    display: none;
+}
+
 .modal-content {
     background-color: #ffffff;
     padding: 30px;

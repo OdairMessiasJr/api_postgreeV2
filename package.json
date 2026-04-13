@@ -14,5 +14,13 @@
     "nodemon": "^3.1.14",
     "pg": "^8.20.0"
   },
-  "description": ""
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OdairMessiasJr/api_postgreeV2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OdairMessiasJr/api_postgreeV2/issues"
+  },
+  "homepage": "https://github.com/OdairMessiasJr/api_postgreeV2#readme"
 }
